@@ -1,0 +1,72 @@
+<!Doctype html>
+<html lang="no">
+<head>
+    <meta charset="utf-8">
+    <title>Hjem</title>
+    <link rel="stylesheet" type="text/css" href="stil_prosjekt3.css">
+    </head>
+    <body>
+    <header>
+    <nav>
+        <a href="index.html" class="heim">Hjem</a>
+        <a href="Side1.html">Side 1</a>
+        <a href="Side2.html">Side 2</a>
+        <a href="Side3.html">Side 3</a>
+        <a href="planlegging.docx">Planlegging</a>
+    </nav>
+    </header>
+    <main>
+        <h1>Chat</h1>
+        <form id="skjema">
+    <input type="text" id="inpAvsender" required placeholder="Hvem er du?">
+    <input type="text" id="inpMening" required placeholder="Hva sier du?">
+    <button type="submit" class="button">OK</button>
+    </form>
+<article id="txtMeldinger"></article>
+    <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD5iQMN42P7rbZRHc7ljvCHAYW-_RorPeg",
+    authDomain: "superchat-d5097.firebaseapp.com",
+    databaseURL: "https://superchat-d5097.firebaseio.com",
+    projectId: "superchat-d5097",
+    storageBucket: "",
+    messagingSenderId: "873058526233"
+  };
+  firebase.initializeApp(config);
+</script>
+    <script>
+let database = firebase.database();
+let meldinger = database.ref("meldinger");
+let skjema = document.getElementById("skjema");
+let inpAvsender = document.getElementById("inpAvsender");
+let inpMening = document.getElementById("inpMening");
+let txtMeldinger = document.getElementById("txtMeldinger");
+function visMelding(snapshot) {
+let melding = snapshot.val();
+let meldingTekst = `<p>
+<b>${melding.avsender}: </b>
+<i>${melding.tekst}</i>
+</p>`;
+txtMeldinger.innerHTML = txtMeldinger.innerHTML + meldingTekst;
+}
+function regNyMelding(evt) {
+evt.preventDefault();
+let nyMelding = {
+avsender: inpAvsender.value,
+tekst: inpMening.value
+};
+meldinger.push(nyMelding);
+inpMening.value = "";
+}
+meldinger.on("child_added", visMelding);
+skjema.onsubmit = regNyMelding;
+</script>
+        <article>
+        <video src="Bilder/video.mp4" controls>
+        </video>
+        </article>
+    </main>
+    </body>
+</html>
